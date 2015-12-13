@@ -14,10 +14,25 @@ steps:
       to do so we need to run the command:
 
 
-                              {0}
+             {0}
 
 
       this will setup a local environment for us to run the blueprint
-  - command: echo "hello world"
+  - command: cfy local execute --workflow install
     intro: >
-      to print hello world on screen you need to run `{0}`. try it!
+
+
+
+
+      Now that we have initialized the blueprint it's time to install it.
+
+
+      to install the blueprint run the command:
+
+
+             {0}
+
+
+      and follow the logs until it is completed
+  - command: exit
+    intro: ''
