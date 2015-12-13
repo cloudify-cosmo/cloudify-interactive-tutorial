@@ -1,8 +1,18 @@
+#!/usr/bin/python
+
 import os
 import yaml
 
-config_stream = open('config.yaml', 'r')
+
+
+config_stream = open(os.path.dirname(os.path.realpath(__file__)) + '/config.yaml', 'r')
 config = yaml.load(config_stream)
+
+# change base dir to be with blueprint
+if config['base_dir'] != '__base_dir__':
+    os.chdir(config['base_dir'])
+
+
 user_input='start'
 steps = config['steps']
 
