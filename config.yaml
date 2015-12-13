@@ -1,0 +1,22 @@
+steps:
+  - command: "cfy local init --blueprint-path blueprint.yaml --inputs '{\"webserver_port\" : \"8080\", \"host_ip\":\"localhost\" }'"
+    intro: >
+      ======================================================
+
+      WELCOME TO CLOUDIFY TUTORIAL
+
+      ======================================================
+
+
+      first we want to locally initialize the blueprint.
+
+      to do so we need to run the command:
+
+
+                              {0}
+
+
+      this will setup a local environment for us to run the blueprint
+  - command: echo "hello world"
+    intro: >
+      to print hello world on screen you need to run `{0}`. try it!
