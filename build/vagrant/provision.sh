@@ -29,6 +29,6 @@ pushd $PROJECT_HOME
         sudo pip install .
     popd
 
-    nohup butterfly.server.py --unsecure --host=0.0.0.0 --port=8080 --login=False --shell=$PROJECT_HOME/main.py &> /dev/null &
+    nohup butterfly.server.py --unsecure --host=0.0.0.0 --port=8088 --login=False --shell=$PROJECT_HOME/main.py &> /dev/null &
 popd
 
