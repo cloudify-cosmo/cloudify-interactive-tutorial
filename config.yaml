@@ -1,6 +1,6 @@
 base_dir: __base_dir__
 steps:
-  - command: "cfy local init --blueprint-path blueprint.yaml --inputs '{\"webserver_port\" : \"8080\", \"host_ip\":\"localhost\" }'"
+  - command: "cfy local init --blueprint-path blueprint.yaml --inputs '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
     intro: >
       ======================================================
 

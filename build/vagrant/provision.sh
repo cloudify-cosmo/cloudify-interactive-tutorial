@@ -30,5 +30,22 @@ pushd $PROJECT_HOME
     popd
 
     nohup butterfly.server.py --unsecure --host=0.0.0.0 --port=8088 --login=False --shell=$PROJECT_HOME/main.py &> /dev/null &
+
+
+    pushd static
+
+        nohup ./server.sh &
+
+    popd
+
 popd
+
+
+export MY_IP=`dig +short myip.opendns.com @resolver1.opendns.com`
+
+
+echo "========================= FINISHED."
+echo "http://$MY_IP"
+echo "========================= FINISHED."
+
 

@@ -1,13 +1,64 @@
+#
+# 2 machines: aws and virtualbox
+#
+# for aws, it assumes vagrant-aws plugin exists
+# use `vagrant up aws --provider aws`
+# required ports: 8088, 22, 80, 9000-9999 (for demo)
 
-Vagrant.configure(2) do |config|
 
-  config.vm.box = "ubuntu/trusty64"
+#
+#
+#
+#
+#
 
-  config.vm.network "forwarded_port", guest: 8088, host: 8088
+Vagrant.configure(2) do |all|
 
-  config.vm.provision "shell" do |s|
+  all.vm.define "aws", primary:true do | config |
+    config.vm.box = "cloudify-walkthrough"
+    config.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+    config.vm.provider :aws do |aws, override|
+      aws.access_key_id = ENV['VAGRANT_AWS_KEY']
+      aws.secret_access_key = ENV['VAGRANT_AWS_ACCESS_KEY']
+      aws.keypair_name = ENV['VAGRANT_KEYPAIR']
+
+      aws.region = ENV['VAGRANT_REGION']
+      aws.instance_type = ENV['VAGRANT_INSTANCE_TYPE']
+
+      aws.ami = ENV['VAGRANT_AMI'] # ubuntu-ireland
+      # aws.ami = 'ami-d05e75b8' # ubuntu-us
+
+      aws.tags = {
+          'Name' => 'cloudify-walkthrough'
+      }
+
+      aws.security_groups = ENV['VAGRANT_SECURITY_GROUP']
+      aws.associate_public_ip = true
+      aws.subnet_id = ENV['VAGRANT_SUBNET_ID']
+      # aws.security_groups = ENV['vagrant-security-group']
+
+
+      override.ssh.username = 'ubuntu'
+      override.ssh.private_key_path = ENV['VAGRANT_KEY_FILE']
+      # http://stackoverflow.com/questions/33098913/vagrant-fails-to-get-machine-up-throwing-keep-getting-an-error-prompt-undef?noredirect=1#comment54025480_33098913
+      override.ssh.insert_key = false
+    end
+  end
+
+  all.vm.define "virtualbox" do |config|
+    config.vm.box = "ubuntu/trusty64"
+
+    config.vm.network "forwarded_port", guest:8088, host:8088
+
+    config.vm.provider "virtualbox" do |v|
+      v.name="cloudify-walkthrough"
+    end
+  end
+
+  all.vm.provision "shell" do |s|
     s.path = "./provision.sh"
     s.privileged = false
   end
+
 
 end
