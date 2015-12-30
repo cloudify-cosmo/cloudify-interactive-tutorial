@@ -1,13 +1,14 @@
 #!/bin/bash
 
-PROJECT_HOME="`pwd`/butterfly-cloudify-walkthrough"
+PROJECT_NAME="cloudify-interactive-tutorial"
+PROJECT_HOME="`pwd`/$PROJECT_NAME"
 
 if [ ! -e $PROJECT_HOME ];then
     sudo apt-get update -y
     sudo apt-get install git python-pip -y --fix-missing
     sudo apt-get install build-essential python-dev unzip  -y
 
-    git clone https://github.com/guy-mograbi-at-gigaspaces/butterfly-cloudify-walkthrough.git
+    git clone https://github.com/cloudify-cosmo/${PROJECT_NAME}.git
 
     sudo pip install cloudify
 else
@@ -25,6 +26,9 @@ pushd my_blueprint
 popd
 
 pushd $PROJECT_HOME
+
+    mkdir -p dev/workspace
+
     pushd 3rd-parties/butterfly
         sudo pip install .
     popd
