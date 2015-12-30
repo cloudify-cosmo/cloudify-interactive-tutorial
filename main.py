@@ -98,7 +98,7 @@ def main():
     for step in steps:
         user_input = ''
         step['command'] = step['command'].replace('__port__', str(data.port))
-        print '\033[92m' + step['intro'].format(
+        print '\033[92m\n' + step['intro'].format(
             '\033[94m' + step['command'] + '\033[0m \033[92m') + '\033[0m'
         while str(user_input.strip()) != str(step['command'].strip()):
 

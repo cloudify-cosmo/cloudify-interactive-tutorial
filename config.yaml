@@ -33,9 +33,6 @@ steps:
       In this tutorial, we'll be deploying such a blueprint.
       The blueprint will deploy a webserver which you will be able to connect to.
 
-      You can find the blueprint:
-      https://github.com/cloudify-examples/simple-python-webserver-blueprint
-
       Enter "next" to continue...
   - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
     intro: |
@@ -93,7 +90,6 @@ steps:
       the only output of the deployment is the endpoint of the web server.
   - command: "cfy local instances"
     intro: |
-
       Each logical entity in an application defined within a blueprint is called
       a node. After a deployment is created, each logical node becomes a set of
       one or more node-instances, which are - you guessed it, instances of that
@@ -124,8 +120,15 @@ steps:
       web server is gone. Aww…
   - command: "exit"
     intro: |
-      That’s it! You’ve just deployed your first application using Cloudify.
-      You can now learn about the blueprint you just deployed here:
-      http://docs.getcloudify.org/3.3.0/intro/blueprints/
+      That’s it!
+
+      You’ve just deployed your first application using Cloudify.
+
+      You can find the blueprint used in this tutorial at:
+      https://github.com/cloudify-examples/simple-python-webserver-blueprint
+
+      To learn more about the blueprint you just deployed and other aspects
+      of Cloudify we recommend that you refer to the docs at:
+      http://docs.getcloudify.org
 
       Enter "exit" to finish or "restart" to restart the tutorial.
