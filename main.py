@@ -39,7 +39,7 @@ def create_workspace_folder():
     cwd = os.getcwd()
     new_cwd = get_workspace_folder()
     shutil.copytree(cwd, new_cwd)
-    os.chdir(new_cwd)
+    os.chdir(new_cwd + '/simple-python-webserver-blueprint-master' )
 
 
 def delete_workspace_folder():
