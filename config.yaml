@@ -1,38 +1,131 @@
-base_dir: __base_dir__
+base_dir: /home/nir0s/repos/cloudify/cloudify-interactive-tutorial/simple-python-webserver-blueprint
 steps:
-  - command: "cfy local init --blueprint-path blueprint.yaml --inputs '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
-    intro: >
+  - command: next
+    intro: |
       ======================================================
 
-      WELCOME TO CLOUDIFY TUTORIAL
+      Welcome to Cloudify's Interactive Tutorial
 
       ======================================================
 
+      This tutorial should provide a basic understanding of what Cloudify is and
+      how to use it.
 
-      first we want to locally initialize the blueprint.
+      We will be:
+        * Using Cloudify to deploy an actual application.
+        * Retrieving some information about our application.
+        * Uninstalling our application.
 
-      to do so we need to run the command:
+      At any point, you can enter "restart" to restart the tutorial.
 
+      Enter "next" to continue...
+  - command: next
+    intro: |
+      Cloudify is a Cloud Applications Orchestrator. It allows you to manage the
+      lifecycle of an application from creation to termination.
+
+      Cloudify Applications are defined in what we call blueprints, which are
+      a logical representation of an application. Blueprints can contain everything
+      the application requires - from infrastructure elements, through configuration
+      scripts to application elements, the way resources relate to one another, and
+      much, much more.
+
+      In this tutorial, we'll be deploying such a blueprint.
+      The blueprint will deploy a webserver which you will be able to connect to.
+
+      You can find the blueprint:
+      https://github.com/cloudify-examples/simple-python-webserver-blueprint
+
+      Enter "next" to continue...
+  - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
+    intro: |
+      First, let's initialize the blueprint to prepare it for deloyment.
+
+      To do so we need to run the command:
 
              {0}
 
-
-      this will setup a local environment for us to run the blueprint
+      which will setup the environment for us.
   - command: cfy local execute --workflow install
-    intro: >
-
-
-
-
+    intro: |
       Now that we have initialized the blueprint it's time to install it.
 
+      Cloudify provisions and manages applications using workflows. Workflows are
+      predefined or user defined flows that perform certain actions on the application.
 
-      to install the blueprint run the command:
+      The default workflow used by Cloudify to deploy an application is called the
+      install workflow.
 
+      To install the blueprint run the command:
 
              {0}
 
+      and follow the logs until it is completed.
+    summary: |
+      If everything goes well, you should see the the execution was completed
+      successfully.
+  - command: curl http://localhost:__port__
+    intro: |
+      We've now installed an application using Cloudify. Let's verify that it was
+      installed correctly.
 
-      and follow the logs until it is completed
-  - command: exit
-    intro: ''
+      Run {0} to see the contents of the web page.
+
+    summary: |
+      You should see a Hello World curled up infront of you :)
+  - command: "cfy local outputs"
+    intro: |
+      Cloudify keeps the entire structure of the application in a model.
+
+      Before a blueprint is ready to be deployed, a deployment is created.
+      A deployment is an instance of a blueprint. The deployment is also a part of
+      the model. The deployment model contains every piece of information the
+      application contains - for instance, information set during runtime like IP
+      addresses to predefined configuration properties like application ports.
+
+      Let’s printout some information about the deployment:
+
+              {0}
+
+      This will show the outputs from the blueprint’s deployment.
+    summary: |
+      Blueprints can have any number of outputs. We can see that in this instance,
+      the only output of the deployment is the endpoint of the web server.
+  - command: "cfy local instances"
+    intro: |
+
+      Each logical entity in an application defined within a blueprint is called
+      a node. After a deployment is created, each logical node becomes a set of
+      one or more node-instances, which are - you guessed it, instances of that
+      node. A node can have multiple node-instances - for instance, multiple
+      virtual machines.
+
+      In this example, we have two nodes, each with one instance. Let’s list
+      the instances:
+
+                {0}
+
+    summary: |
+      We can see all available information on our two instances like their names,
+      their relationships to other nodes and much more. This information can also
+      be accessed via Cloudify's REST API.
+  - command: "cfy local execute -w uninstall"
+    intro: |
+      An uninstall workflow is also built-in to Cloudify, which allows you to
+      uninstall a deployed blueprint.
+
+      To uninstall our application run:
+
+                {0}
+
+      This will delete the deployment's model and terminate our application.
+    summary: |
+      We’ve now uninstalled our application. The model was erased and the
+      web server is gone. Aww…
+  - command: "exit"
+    intro: |
+      That’s it! You’ve just deployed your first application using Cloudify.
+      You can now learn about the blueprint you just deployed here:
+      http://docs.getcloudify.org/3.3.0/intro/blueprints/
+
+      Enter "exit" to finish or "restart" to restart the tutorial.
