@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 import os
 import yaml
@@ -7,6 +7,7 @@ import atexit
 import socket
 import subprocess
 import re
+import sys
 
 
 class Data:
@@ -27,11 +28,14 @@ def get_free_port():
     sock.bind(('', 0))
     result = sock.getsockname()[1]
     sock.close()
+    while int(result) > 39000:
+        result = get_free_port()
     return result
 
 
 def get_workspace_folder():
-    return os.path.join( data.my_dir, 'dev', 'workspace', 'blueprint_' + str(data.port))
+    return os.path.join(
+        data.my_dir, 'dev', 'workspace', 'blueprint_' + str(data.port))
 
 
 def create_workspace_folder():
@@ -68,10 +72,13 @@ def kill_process_by_port():
             subprocess.Popen(['kill', '-9', pid])
 
 
+def green_print(content):
+    print '\033[92m' + content + '\033[0m'
+
 
 def main():
-
-    config_stream = open( data.my_dir + '/config.yaml', 'r')
+    os.system('clear')
+    config_stream = open(data.my_dir + '/config.yaml', 'r')
     config = yaml.load(config_stream)
 
     data.port = get_free_port()
@@ -83,18 +90,44 @@ def main():
         ''' go to default location '''
         os.chdir('dev/my_blueprint')
 
-    create_workspace_folder( )
+    create_workspace_folder()
 
-    user_input='start'
+    user_input = 'start'
     steps = config['steps']
 
     for step in steps:
-        step['command'] = step['command'].replace('__port__',str( data.port ))
-        print '\033[92m' + step['intro'].format('\033[94m' + step['command'] + '\033[0m \033[92m') + '\033[0m'
-        while str(user_input.strip()) !=  str(step['command'].strip()):
+        user_input = ''
+        step['command'] = step['command'].replace('__port__', str(data.port))
+        print '\033[92m\n' + step['intro'].format(
+            '\033[94m' + step['command'] + '\033[0m \033[92m') + '\033[0m'
+        while str(user_input.strip()) != str(step['command'].strip()):
 
-            user_input = raw_input('cfy>')
-            os.system(user_input)
+            user_input = raw_input('cfy $ ')
+            if user_input == 'restart':
+                os.system('clear')
+                main()
+            if user_input == 'exit':
+                green_print('Please come again!')
+                sys.exit()
+            if step['command'] == 'exit':
+                if user_input == 'exit':
+                    green_print('Please come again!')
+                    sys.exit()
+                else:
+                    continue
+            if user_input == 'next':
+                os.system('clear')
+                break
+            if user_input == step['command']:
+                os.system(user_input)
+                if step.get('summary'):
+                    green_print('\n' + step['summary'])
+                green_print('\nEnter "next" to continue...\n')
+                user_input = raw_input('cfy $ ')
+                if user_input == 'next':
+                    os.system('clear')
+                    break
+
 
 def cleanup():
     kill_process_by_port()
@@ -109,5 +142,3 @@ except KeyboardInterrupt:
 
 atexit.register(cleanup)
 # print 'hello ' + console_output
-
-
