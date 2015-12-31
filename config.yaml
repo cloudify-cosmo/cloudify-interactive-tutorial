@@ -1,4 +1,4 @@
-base_dir: /home/nir0s/repos/cloudify/cloudify-interactive-tutorial/simple-python-webserver-blueprint
+base_dir: __base_dir__
 steps:
   - command: next
     intro: |
