@@ -48,7 +48,10 @@ class Intro:
             match = re.match(prog, line)
             if match:
                 pid = match.group('pid')
-                subprocess.Popen(['kill', '-9', pid])
+                try:
+                    subprocess.Popen(['kill', '-9', pid])
+                except:
+                    pass
 
     def get_workspace_folder(self):
         return os.path.join(
@@ -59,8 +62,6 @@ class Intro:
         cwd = os.getcwd()
         new_cwd = self.get_workspace_folder()
         shutil.copytree(cwd, new_cwd)
-        # os.chdir(os.path.join(
-        # new_cwd, 'simple-python-webserver-blueprint-master'))
         os.chdir(new_cwd)
 
     def delete_workspace_folder(self):
