@@ -33,7 +33,7 @@ steps:
       The blueprint will deploy a webserver which you will be able to connect to.
 
       Enter "next" to continue...
-  - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
+  - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\":\"__port__\", \"host_ip\":\"localhost\"}'"
     intro: |
       First, let's initialize the blueprint to prepare it for deloyment.
 
