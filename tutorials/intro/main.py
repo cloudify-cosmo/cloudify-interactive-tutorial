@@ -82,6 +82,8 @@ class Tutorial:
         while str(user_input.strip()) != str(step['command'].strip()):
 
             user_input = raw_input('cfy $ ')
+            if user_input.startswith(('ls', 'cfy')):
+                os.system(user_input)
             if user_input == 'restart':
                 os.system('clear')
                 main()
