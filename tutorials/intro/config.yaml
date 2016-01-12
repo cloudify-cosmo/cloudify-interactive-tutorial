@@ -15,7 +15,8 @@ steps:
         * Retrieving some information about our application.
         * Uninstalling our application.
 
-      At any point, you can enter "restart" to restart the tutorial.
+      If you would like to view the blueprint at any time enter `cat blueprint.yaml`.
+      At any point, you can enter `restart` to restart the tutorial.
 
       Enter "next" to continue...
   - command: next
