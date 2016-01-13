@@ -16,7 +16,7 @@ steps:
         * Uninstalling our application.
 
       If you would like to view the blueprint at any time enter `cat blueprint.yaml`.
-      At any point, you can enter `restart` to restart the tutorial.
+      At any point, you can enter `commands` to see the list of available commands.
 
       Enter "next" to continue...
   - command: next
@@ -118,7 +118,7 @@ steps:
     summary: |
       We’ve now uninstalled our application. The model was erased and the
       web server is gone. Aww…
-  - command: "exit"
+  - command: "last"
     intro: |
       That’s it!
 
@@ -131,4 +131,4 @@ steps:
       of Cloudify we recommend that you refer to the docs at:
       http://docs.getcloudify.org
 
-      Enter "exit" to finish or "restart" to restart the tutorial.
+      Close tab to finish or `restart` to restart the tutorial.
