@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "node tutorials/introjs/main.js"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "chalk": "^1.1.1",
+    "freeport": "^1.0.5",
+    "fs-extra": "^0.26.4",
+    "lodash": "^4.0.0",
+    "log4js": "^0.6.29",
+    "terminal-kit": "^0.22.7",
+    "ttys": "0.0.3",
+    "yamljs": "^0.2.4"
+  }
+}

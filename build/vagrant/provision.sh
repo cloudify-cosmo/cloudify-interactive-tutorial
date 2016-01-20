@@ -4,9 +4,9 @@ PROJECT_NAME="cloudify-interactive-tutorial"
 PROJECT_HOME="`pwd`/$PROJECT_NAME/tutorials/intro"
 
 #need this for machine provisioning.. but not necessarily for local
-#     sudo apt-get update -y
-#     sudo apt-get install git python-pip -y --fix-missing
-#     sudo apt-get install build-essential python-dev unzip  -y
+sudo apt-get update -y
+sudo apt-get install git python-pip -y --fix-missing
+sudo apt-get install build-essential python-dev unzip  -y
 
 sudo pip install cloudify
 git clone https://github.com/cloudify-cosmo/${PROJECT_NAME}.git

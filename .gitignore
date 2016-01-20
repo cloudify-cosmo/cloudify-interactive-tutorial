@@ -2,3 +2,5 @@
 .idea
 dev
 .vagrant
+node_modules
+autocomplete_output
