@@ -15,7 +15,8 @@ steps:
         * Retrieving some information about our application.
         * Uninstalling our application.
 
-      At any point, you can enter "restart" to restart the tutorial.
+      If you would like to view the blueprint at any time enter `cat blueprint.yaml`.
+      At any point, you can enter `commands` to see the list of available commands.
 
       Enter "next" to continue...
   - command: next
@@ -33,7 +34,7 @@ steps:
       The blueprint will deploy a webserver which you will be able to connect to.
 
       Enter "next" to continue...
-  - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\" : \"__port__\", \"host_ip\":\"localhost\" }'"
+  - command: "cfy local init -p blueprint.yaml -i '{\"webserver_port\":\"__port__\", \"host_ip\":\"localhost\"}'"
     intro: |
       First, let's initialize the blueprint to prepare it for deloyment.
 
@@ -117,7 +118,7 @@ steps:
     summary: |
       We’ve now uninstalled our application. The model was erased and the
       web server is gone. Aww…
-  - command: "exit"
+  - command: "last"
     intro: |
       That’s it!
 
@@ -130,4 +131,4 @@ steps:
       of Cloudify we recommend that you refer to the docs at:
       http://docs.getcloudify.org
 
-      Enter "exit" to finish or "restart" to restart the tutorial.
+      Close tab to finish or `restart` to restart the tutorial.

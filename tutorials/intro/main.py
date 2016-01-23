@@ -8,6 +8,7 @@ import socket
 import subprocess
 import re
 import sys
+import shlex
 
 
 class Data:
@@ -71,41 +72,145 @@ class Intro:
 
 
 class Tutorial:
+    AVAILABLE_COMMANDS = """
+    * next (Continue to the next step)
+    * ls (e.g ls -l - list the blueprint's files)
+    * cfy (e.g. cfy -h - show Cloudify CLI's help)
+    * cat (e.g. cat blueprint.yaml - view the blueprint)
+    * clear (Clear the screen and print the current step)
+    * restart (Restart the tutorial)
+    * exit (Exit the tutorial)
+    * commands (Show this command menu)
+    """
+
+    def __init__(self):
+        self.previous_step_incomplete = False
 
     def green_print(self, content):
         print '\033[92m' + content + '\033[0m'
 
+    def yellow_print(self, content):
+        print '\033[93m' + content + '\033[0m'
+
+    def format_command(self, content):
+        return '\033[94m' + content + '\033[92m'
+
+    def step_print(self, s):
+        self.green_print(s['intro'].format(self.format_command(s['command'])))
+
     def run_step(self, step):
+        """
+        If a command is incomplete, set incomplete.
+        for each step, check if incomplete and alert.
+
+        if restart: clear and restart
+        if ls or cfy or nothing: run command or do nothing
+        if exit: just exit
+        if good_command: run it, print summary and next
+        if next: if next is the command, go to next step
+        elif missing_step: alert and ask if to continue
+        else: if not good_command: set missing_step
+        """
+        def handle_next(user_input, cmd):
+            if self.previous_step_incomplete and not cmd == 'next':
+                user_input = raw_input(
+                    'Note that you have not completed some of the '
+                    'previous steps. Continuing means you will not be '
+                    'able to complete the tutorial. Would you like to '
+                    'continue? (yes/no):')
+                if user_input in ('y', 'yes'):
+                    os.system('clear')
+                    return True
+            else:
+                os.system('clear')
+                return True
+
+        def handle_exit():
+            self.green_print('Please come again!')
+            sys.exit()
+
         user_input = ''
-        print '\033[92m\n' + step['intro'].format(
-            '\033[94m' + step['command'] + '\033[0m \033[92m') + '\033[0m'
+        self.step_print(step)
         while str(user_input.strip()) != str(step['command'].strip()):
 
+            step_done = False
             user_input = raw_input('cfy $ ')
-            if user_input == 'restart':
-                os.system('clear')
-                main()
-            if user_input == 'exit':
-                self.green_print('Please come again!')
-                sys.exit()
-            if step['command'] == 'exit':
-                if user_input == 'exit':
-                    self.green_print('Please come again!')
-                    sys.exit()
+            if step['command'] == 'last':
+                if user_input == 'restart':
+                    os.system('clear')
+                    main()
                 else:
                     continue
-            if user_input == 'next':
-                os.system('clear')
-                break
+
             if user_input == step['command']:
-                os.system(user_input)
-                if step.get('summary'):
-                    self.green_print('\n' + step['summary'])
-                self.green_print('\nEnter "next" to continue...\n')
-                user_input = raw_input('cfy $ ')
-                if user_input == 'next':
+                if self.previous_step_incomplete:
+                    # also need to print this if next was executed after
+                    # having uncompleted steps
+                    self.green_print(
+                        'As you have not completed all necessary steps, you '
+                        'cannot perform any other steps. If you wish to '
+                        'browse through the tutorial, you can still perform '
+                        'other actions. You can always `restart` if you wish.')
+                    continue
+                else:
+                    step_done = True
+                    if user_input == 'next':
+                        os.system('clear')
+                        break
+                    # this does not take errors into account in any way.
+                    # maybe should also block the user from rerunning the same
+                    # step twice?
+                    os.system(user_input)
+                    if step.get('summary'):
+                        self.green_print('\n' + step['summary'])
+                    self.green_print('\nEnter "next" to continue...\n')
+                    user_input = raw_input('cfy $ ')
+                    if user_input == 'next':
+                        os.system('clear')
+                        break
+            elif user_input == 'next':
+                if step_done:
                     os.system('clear')
                     break
+                if not self.previous_step_incomplete:
+                    user_input = raw_input(
+                        'This will skip a necessary step for completing the '
+                        'tutorial. If you choose to continue, you will not be '
+                        'able to perform any more steps. Are you sure you '
+                        'want to continue? (yes/no):')
+                    if user_input in ('y', 'yes'):
+                        self.previous_step_incomplete = True
+                        os.system('clear')
+                        break
+                else:
+                    os.system('clear')
+                    break
+            elif user_input.startswith('cat'):
+                if user_input.startswith(('cat ..', 'cat /', 'cat ~')):
+                    self.green_print('Can only cat files within current '
+                                     'directory.')
+                else:
+                    try:
+                        output = subprocess.check_output(
+                            shlex.split(user_input))
+                        self.yellow_print(output + '\n')
+                    except:
+                        continue
+            elif user_input == 'secret_command_input':
+                os.system(step['command'])
+            elif user_input.startswith(('ls', 'cfy')):
+                os.system(user_input)
+            elif user_input == 'clear':
+                os.system('clear')
+                self.step_print(step)
+            elif user_input == 'restart':
+                self.previous_step_incomplete = False
+                os.system('clear')
+                main()
+            elif user_input == 'exit':
+                handle_exit()
+            elif user_input == 'help':
+                self.yellow_print(self.AVAILABLE_COMMANDS)
 
 
 def main():
