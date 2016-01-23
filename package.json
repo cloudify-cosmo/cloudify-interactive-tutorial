@@ -2,6 +2,9 @@
   "scripts": {
     "start": "node tutorials/introjs/main.js"
   },
+  "bin" : {
+    "cfy-tutorial" : "tutorials/introjs/main.js"
+  },
   "dependencies": {
     "async": "^1.5.2",
     "chalk": "^1.1.1",
