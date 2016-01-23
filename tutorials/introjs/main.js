@@ -25,7 +25,7 @@ var _ = require('lodash');
  * @type WalkthroughData
  */
 var data = {
-    root: path.resolve(process.env.WALKTHOROUGH_ROOT ||   path.join( __dirname, '../../dev/my_blueprint'  ) ), // support running the code from project root
+    root: path.resolve(process.env.WALKTHROUGH_ROOT ||   path.join( __dirname, '../../dev/my_blueprint'  ) ), // support running the code from project root
     port: null,
     configFile: path.join(__dirname, 'config.yaml')
 };
