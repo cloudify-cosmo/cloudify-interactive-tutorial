@@ -1,6 +1,9 @@
 {
+  "name" : "cloudify-interactive-tutorial",
+  "version" : "0.0.0",
   "scripts": {
-    "start": "node tutorials/introjs/main.js"
+    "start": "node tutorials/introjs/main.js",
+    "install" : "sudo pip install 3rd-parties/butterfly"
   },
   "bin" : {
     "cfy-tutorial" : "tutorials/introjs/main.js"
