@@ -3,7 +3,7 @@
   "version" : "0.0.0",
   "scripts": {
     "start": "node tutorials/introjs/main.js",
-    "install" : "sudo pip install 3rd-parties/butterfly"
+    "install" : "echo \"this is workdir`pwd`\" && sudo pip install 3rd-parties/butterfly"
   },
   "bin" : {
     "cfy-tutorial" : "tutorials/introjs/main.js"
