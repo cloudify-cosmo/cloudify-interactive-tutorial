@@ -65,10 +65,10 @@ steps:
       We've now installed an application using Cloudify. Let's verify that it was
       installed correctly.
 
-      Run {0} to see the contents of the web page.
+      Click {0} to see the contents of the web page.
 
     summary: |
-      You should see a Hello World curled up infront of you :)
+      You should see a Hello World message with cloudify logo infront of you :)
   - command: "cfy local outputs"
     intro: |
       Cloudify keeps the entire structure of the application in a model.
