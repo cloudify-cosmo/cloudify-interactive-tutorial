@@ -20,6 +20,13 @@ var intro = require('./intro');
 var tutorial = require('./tutorial');
 var _ = require('lodash');
 
+try {
+    if (process.argv[2] === 'motd') {
+        console.log(path.resolve('conf/motd'));
+        process.exit(0);
+    }
+}catch(e){}
+
 /**
  *
  * @type WalkthroughData
