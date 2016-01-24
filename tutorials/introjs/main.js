@@ -45,78 +45,87 @@ var events = new Events();
 // regex of allowed commands
 var allowedCommands = [ 'ls', 'cfy' ];
 
-
-function main() {
+function find_free_port() {
     freeport(function (err, port) {
         if (err) throw err;
-        data.port = port;
-        events.emit('port');
-    });
-
-    events.on('port', function () {
-        intro.createWorkspaceFolder(data);
-        intro.registerCleanup(data);
-        var config = intro.readConfig(data);
-
-        var stepCounter = 0;
-
-        function nextStep(){
-            if ( stepCounter + 1 < config.steps.length ) {
-                stepCounter++;
-            }
-            setTimeout(run,0);
+        if ( port > 39000 ){
+            find_free_port();
+        }else{
+            data.port = port;
+            events.emit('port');
         }
-
-        function stepCallback(input) {
-            //console.log('after run step', input);
-            var step = getStep();
-            if (input === 'next') {
-                nextStep();
-            } else if (input === 'restart') {
-                main();
-            } else if (input.indexOf('sudo') >= 0) {
-                tutorial.notAllowed();
-                prompt();
-            } else if (input === 'exit') {
-                tutorial.goodbye();
-                process.exit(0);
-            } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
-                shell.exec(input, function (code, output, error) {
-                    console.log(output);
-                    tutorial.summary(step, stepCallback );
-                })
-            }else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
-                shell.exec(input, function (code, output, error) {
-                    console.log(output);
-                    prompt();
-                })
-            }
-            else {
-                prompt();
-                //tutorial.goodbye();
-                //process.exit(0);
-            }
-        }
-
-        function getStep(){
-            return config.steps[stepCounter];
-        }
-
-        function run() {
-            tutorial.runStep( getStep() , stepCallback );
-        }
-
-        function prompt(){
-            tutorial.prompt( getStep(), stepCallback );
-        }
-
-        run();
 
     });
 }
 
-setTimeout(function(){
-    main();
+find_free_port();
+
+function main() {
+    intro.createWorkspaceFolder(data);
+    intro.registerCleanup(data);
+    var config = intro.readConfig(data);
+
+    var stepCounter = 0;
+
+    function nextStep() {
+        if (stepCounter + 1 < config.steps.length) {
+            stepCounter++;
+        }
+        setTimeout(run, 0);
+    }
+
+    function stepCallback(input) {
+        //console.log('after run step', input);
+        var step = getStep();
+        if (input === 'next') {
+            nextStep();
+        } else if (input === 'restart') {
+            main();
+        } else if (input.indexOf('sudo') >= 0) {
+            tutorial.notAllowed();
+            prompt();
+        } else if (input === 'exit') {
+            tutorial.goodbye();
+            process.exit(0);
+        } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
+            shell.exec(input, function (code, output, error) {
+                console.log(output);
+                tutorial.summary(step, stepCallback);
+            })
+        } else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
+            shell.exec(input, function (code, output, error) {
+                console.log(output);
+                prompt();
+            })
+        }
+        else {
+            prompt();
+            //tutorial.goodbye();
+            //process.exit(0);
+        }
+    }
+
+    function getStep() {
+        return config.steps[stepCounter];
+    }
+
+    function run() {
+        tutorial.runStep(getStep(), stepCallback);
+    }
+
+    function prompt() {
+        tutorial.prompt(getStep(), stepCallback);
+    }
+
+    run();
+}
+
+setTimeout(function(){ // delay for splash screen
+    if ( !data.port ) {
+        events.on('port', main);
+    }else {
+        main();
+    }
 },5000);
 
 
