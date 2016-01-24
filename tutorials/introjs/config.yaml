@@ -60,7 +60,7 @@ steps:
     summary: |
       If everything goes well, you should see the the execution was completed
       successfully.
-  - command: curl http://localhost:__port__
+  - command: curl http://__ip__:__port__
     intro: |
       We've now installed an application using Cloudify. Let's verify that it was
       installed correctly.
