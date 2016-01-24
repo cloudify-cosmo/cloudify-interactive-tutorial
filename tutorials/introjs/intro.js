@@ -58,6 +58,7 @@ exports.readConfig = function( data ){
         try {
             if (s.command) {
                 s.command = s.command.replace('__port__', data.port);
+                s.command = s.command.replace('__ip__', process.env.EXTERNAL_IP);
             }
 
 
