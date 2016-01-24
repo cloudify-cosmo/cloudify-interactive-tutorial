@@ -7,7 +7,7 @@ var cfyAutocomplete = require('./cfyAutocomplete');
 var async = require('async');
 var fs = require('fs');
 var _ = require('lodash');
-var logger = require('logger');
+var logger = require('log4js').getLogger('tutorial');
 
 var autocomplete = function (step) {
     return function (inputString, callback) {
