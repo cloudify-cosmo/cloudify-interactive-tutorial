@@ -22,7 +22,7 @@ var _ = require('lodash');
 
 try {
     if (process.argv[2] === 'motd') {
-        console.log(path.resolve('conf/motd'));
+        console.log(path.join(__dirname,'conf/motd'));
         process.exit(0);
     }
 }catch(e){}
