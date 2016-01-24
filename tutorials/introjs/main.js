@@ -80,15 +80,15 @@ function main() {
             } else if (input === 'exit') {
                 tutorial.goodbye();
                 process.exit(0);
-            } else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
-                shell.exec(input, function (code, output, error) {
-                    console.log(output);
-                    prompt();
-                })
-            } else if (step.command === input) {
+            } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
                 shell.exec(input, function (code, output, error) {
                     console.log(output);
                     tutorial.summary(step, stepCallback );
+                })
+            }else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
+                shell.exec(input, function (code, output, error) {
+                    console.log(output);
+                    prompt();
                 })
             }
             else {
