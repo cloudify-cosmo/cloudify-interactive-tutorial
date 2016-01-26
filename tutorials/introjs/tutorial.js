@@ -84,11 +84,10 @@ var history = [ ] ;
 
 exports.prompt = function( step, callback ){
 
-    term('cfy $ ');
+    term('\ncfy $ ');
     term.inputField(
         { history: history, autoComplete: autocomplete(step), autoCompleteMenu: true},
         function (error, input) {
-            console.log('\n\n\n');
             history.push(input);
             if ( error ){
                 logger.error('unable to get input', error);
