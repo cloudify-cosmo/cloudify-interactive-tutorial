@@ -20,6 +20,14 @@ var intro = require('./intro');
 var tutorial = require('./tutorial');
 var _ = require('lodash');
 
+var log4js = require('log4js');
+
+log4js.configure({
+    levels: {
+        "[all]" : process.env.LOG_LEVEL || "FATAL"
+    }
+});
+
 try {
     if (process.argv[2] === 'motd') {
         console.log(path.join(__dirname,'../../conf/motd'));
