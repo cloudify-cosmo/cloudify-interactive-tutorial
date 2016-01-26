@@ -39,7 +39,7 @@ var catCommand = testPathCommand('cat','cannot cat this file');
 
 function allowedCommand( input ){
     logger.trace('testing allowed commands');
-    if ( [ 'cat', 'ls', 'cfy' ].indexOf(_.first(input.split(' '))) < 0 ){
+    if ( [ '','cat', 'ls', 'cfy' ].indexOf(_.first(input.split(' '))) < 0 ){
         return {valid:false, reason: 'command is not allowed'}
 
     }

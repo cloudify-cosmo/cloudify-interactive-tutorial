@@ -100,9 +100,13 @@ function main() {
         } else { // general command
             var commandValidity = validCommands.isValid(input);
             if ( commandValidity.valid ) {
-                shell.exec(input, function () {
+                if ( input !== '' ) {
+                    shell.exec(input, function () {
+                        prompt();
+                    });
+                }else{
                     prompt();
-                });
+                }
             }else{
                 tutorial.notAllowed(commandValidity.reason);
                 prompt();
