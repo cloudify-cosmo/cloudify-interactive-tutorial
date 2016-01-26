@@ -96,13 +96,12 @@ function main() {
             tutorial.goodbye();
             process.exit(0);
         } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
-            shell.exec(input, function (code, output, error) {
-                console.log(output);
+            shell.exec(input, function () {
+                // shell will already print output
                 tutorial.summary(step, stepCallback);
             })
         } else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
-            shell.exec(input, function (code, output, error) {
-                console.log(output);
+            shell.exec(input, function () {
                 prompt();
             })
         }
@@ -134,7 +133,7 @@ setTimeout(function(){ // delay for splash screen
     }else {
         main();
     }
-},5000);
+},parseInt(process.env.SPLASH_TIME || '3000',10));
 
 
 

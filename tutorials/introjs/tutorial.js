@@ -84,11 +84,12 @@ var history = [ ] ;
 
 exports.prompt = function( step, callback ){
 
-    term('\ncfy $ ');
+    term('cfy $ ');
     term.inputField(
         { history: history, autoComplete: autocomplete(step), autoCompleteMenu: true},
         function (error, input) {
             history.push(input);
+            console.log('');
             if ( error ){
                 logger.error('unable to get input', error);
             }
@@ -134,9 +135,9 @@ exports.runStep = function( step, callback ){
 };
 
 exports.notAllowed = function(){
-    term.brightRed('operation not allowed. \n\n\n');
+    term.brightRed('operation not allowed.\n');
 };
 
 exports.goodbye = function(){
-    term( myChalk.brightGreen('Please come again!!\n\n\n'));
+    term( myChalk.brightGreen('Please come again!!\n'));
 };
