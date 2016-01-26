@@ -134,8 +134,8 @@ exports.runStep = function( step, callback ){
     //setTimeout(slowType,3);
 };
 
-exports.notAllowed = function(){
-    term.brightRed('operation not allowed.\n');
+exports.notAllowed = function( reason ){
+    term.brightRed( ( reason || 'operation not allowed.') + '\n');
 };
 
 exports.goodbye = function(){

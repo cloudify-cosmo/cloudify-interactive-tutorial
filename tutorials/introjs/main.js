@@ -19,6 +19,7 @@ var shell = require('shelljs');
 var intro = require('./intro');
 var tutorial = require('./tutorial');
 var _ = require('lodash');
+var validCommands = require('./validCommands');
 
 var log4js = require('log4js');
 
@@ -50,8 +51,7 @@ var events = new Events();
 
 
 
-// regex of allowed commands
-var allowedCommands = [ 'ls', 'cfy' ];
+
 
 function find_free_port() {
     freeport(function (err, port) {
@@ -89,9 +89,6 @@ function main() {
             nextStep();
         } else if (input === 'restart') {
             main();
-        } else if (input.indexOf('sudo') >= 0) {
-            tutorial.notAllowed();
-            prompt();
         } else if (input === 'exit') {
             tutorial.goodbye();
             process.exit(0);
@@ -100,15 +97,16 @@ function main() {
                 // shell will already print output
                 tutorial.summary(step, stepCallback);
             })
-        } else if (allowedCommands.indexOf(_.first(input.split(' '))) >= 0) {
-            shell.exec(input, function () {
+        } else { // general command
+            var commandValidity = validCommands.isValid(input);
+            if ( commandValidity.valid ) {
+                shell.exec(input, function () {
+                    prompt();
+                });
+            }else{
+                tutorial.notAllowed(commandValidity.reason);
                 prompt();
-            })
-        }
-        else {
-            prompt();
-            //tutorial.goodbye();
-            //process.exit(0);
+            }
         }
     }
 
