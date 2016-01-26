@@ -1,3 +1,12 @@
+help: |
+  * next (Continue to the next step)
+  * ls (e.g ls -l - list the blueprint's files)
+  * cfy (e.g. cfy -h - show Cloudify CLI's help)
+  * cat (e.g. cat blueprint.yaml - view the blueprint)
+  * clear (Clear the screen and print the current step)
+  * restart (Restart the tutorial)
+  * exit (Exit the tutorial)
+  * commands (Show this command menu)
 steps:
   - intro: |
       ======================================================

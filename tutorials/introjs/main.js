@@ -15,6 +15,9 @@ var path = require('path');
 var freeport = require('freeport');
 var logger = require('log4js').getLogger('main');
 var shell = require('shelljs');
+var termkit = require('terminal-kit');
+var term = termkit.terminal ;
+var myChalk = require('./myChalk');
 
 var intro = require('./intro');
 var tutorial = require('./tutorial');
@@ -87,9 +90,14 @@ function main() {
         var step = getStep();
         if (input === 'next') {
             nextStep();
-        } else if (input === 'restart') {
+        } else if ( input === 'clear'){
+            run();
+        }else if (input === 'restart') {
             main();
-        } else if (input === 'exit') {
+        } else if ( input === 'help' || input === 'commands' ){
+            term(myChalk.brightGreen(config.help));
+            prompt();
+        }else if (input === 'exit') {
             tutorial.goodbye();
             process.exit(0);
         } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
