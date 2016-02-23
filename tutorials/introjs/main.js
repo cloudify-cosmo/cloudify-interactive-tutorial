@@ -26,10 +26,26 @@ var validCommands = require('./validCommands');
 
 var log4js = require('log4js');
 
+
 log4js.configure({
-    levels: {
-        "[all]" : process.env.LOG_LEVEL || "FATAL"
-    }
+    appenders: [
+        {
+            level: process.env.LOG_LEVEL || 'FATAL',
+            'type': 'logLevelFilter',
+            appender: {
+                type: 'console'
+            }
+        },
+        {
+            level: 'DEBUG',
+            'type': 'logLevelFilter',
+            appender: {
+                type: 'file',
+                level: 'DEBUG',
+                filename: 'walkthrough.log'
+            }
+        }]
+
 });
 
 try {
@@ -62,6 +78,7 @@ function find_free_port() {
         if ( port > 39000 ){
             find_free_port();
         }else{
+            logger.debug('found port', port);
             data.port = port;
             events.emit('port');
         }
