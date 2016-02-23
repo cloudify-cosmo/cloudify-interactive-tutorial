@@ -75,7 +75,7 @@ var events = new Events();
 function find_free_port() {
     freeport(function (err, port) {
         if (err) throw err;
-        if ( port > 39000 ){
+        if ( port > 39000 || port < 32000 ){ // added lower limit per assi's request. 
             find_free_port();
         }else{
             logger.debug('found port', port);
