@@ -6,11 +6,11 @@
 
   tasks:
     - name: Define "sys_update" var.
-      shell: 'Ansible veriable sys_update'
+      shell: 'ansible_veriable_sys_update'
       register: sys_update
 
     - name: Define "deploy" var.
-      shell: 'Ansible veriable deploy'
+      shell: 'ansible_veriable_deploy'
       register: deploy_code
 
     - name: Run apt-get update.
@@ -20,7 +20,7 @@
 
     - name: Install dependencies packages.
       sudo: yes
-      apt: name=Ansible-items state=present
+      apt: name=ansible_items state=present
       with_items:
          - build-essential
          - libssl-dev
@@ -73,7 +73,7 @@
 
     - name: Install pip package.
       sudo: yes
-      pip: name=Ansible-items
+      pip: name=ansible_items
       with_items:
          - cloudify
          - butterfly==2.0.0
@@ -100,4 +100,4 @@
         CONTENT_HOME: /home/ubuntu/simple-python-webserver-blueprint
         WALKTHROUGH_ROOT: /home/ubuntu/simple-python-webserver-blueprint
         NODE_VERSION: 4.2.1
-        EXTERNAL_IP: "Ansible_host_external_ip"
+        EXTERNAL_IP: "ansible_host_external_ip"

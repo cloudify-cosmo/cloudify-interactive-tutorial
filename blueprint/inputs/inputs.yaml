@@ -1,9 +1,9 @@
-## This is an inputs file for the aws-ec2-blueprint.yaml. Many of these inputs have default values in the blueprint itself.
+## This is an inputs file for the tutorial-blueprint.yaml. Many of these inputs have default values in the blueprint itself.
 ## However, there are some that have no defaults and you will need to fill them out with your own values, i.e. your credentials.
 
 ## You need to provide these. There's no way I can know the default values.
 aws_access_key_id:
-aws_secret_access_key: 
+aws_secret_access_key:
 
 ## You also need to provide this. There's a good chance that us-east-1 will work for you, so I provided a default.
 ## This places the server in Ireland region of AWS (If you change this, Confirm that the AMI is avalible in the new region)

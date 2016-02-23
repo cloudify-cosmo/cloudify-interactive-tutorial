@@ -50,11 +50,11 @@ PLAYBOOK=$(ctx download-resource-and-render resources/${PLAYBOOK_FILENAME})
 cp $PLAYBOOK $PLAYBOOK_PATH
 
 # Manipulate playbook to prepare for Ansible run
-rpx repl -p $PLAYBOOK_PATH -r 'Ansible veriable sys_update' -w 'echo "{{ sys_update }}"'
-rpx repl -p $PLAYBOOK_PATH -r 'Ansible veriable deploy' -w 'echo "{{ deploy }}"'
-rpx repl -p $PLAYBOOK_PATH -r Ansible-items -w "{{ item }}"
+rpx repl -p $PLAYBOOK_PATH -r 'ansible_veriable_sys_update' -w 'echo "{{ sys_update }}"'
+rpx repl -p $PLAYBOOK_PATH -r 'ansible_veriable_deploy' -w 'echo "{{ deploy }}"'
+rpx repl -p $PLAYBOOK_PATH -r ansible_items -w "{{ item }}"
 rpx repl -p $PLAYBOOK_PATH -r butterfly_pid_stdout -w {{butterfly_PID.stdout}}
-rpx repl -p $PLAYBOOK_PATH -r Ansible_host_external_ip -w {{ext_ip.stdout}}
+rpx repl -p $PLAYBOOK_PATH -r ansible_host_external_ip -w {{ext_ip.stdout}}
 
 # Run playbook after manipulation
 ctx logger info "Ansible Playbook is now running"
