@@ -182,6 +182,9 @@ setTimeout(function(){ // delay for splash screen
 },parseInt(process.env.SPLASH_TIME || '3000',10));
 
 
-
+// workaround to resolve an issue : https://github.com/paradoxxxzero/butterfly/issues/100
+setTimeout(function(){ // add a workaround.. the process should get out within an hour by default..
+    process.exit(0);
+}, 60 * 60 * 1000);
 
 
