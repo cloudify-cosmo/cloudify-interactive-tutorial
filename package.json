@@ -2,7 +2,8 @@
   "name": "cloudify-interactive-tutorial",
   "version": "0.0.0",
   "scripts": {
-    "start": "node tutorials/introjs/main.js"
+    "start": "node tutorials/introjs/main.js",
+    "butterfly": "butterfly.server.py --unsecure --host=0.0.0.0 --port=3000 --login=False --shell=\"cfy-tutorial\""
   },
   "bin": {
     "cfy-tutorial": "tutorials/introjs/main.js"
@@ -14,6 +15,7 @@
     "fs-extra": "^0.26.4",
     "lodash": "^4.0.0",
     "log4js": "^0.6.29",
+    "logentries-log4js-appender": "~0.0.0",
     "shelljs": "^0.5.3",
     "terminal-kit": "^0.22.7",
     "ttys": "0.0.3",

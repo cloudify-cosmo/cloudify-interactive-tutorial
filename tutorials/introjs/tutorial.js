@@ -111,7 +111,10 @@ exports.summary = function( step, callback ){
  * @param {function(input)} callback
  */
 exports.runStep = function( step, callback ){
-    term.reset();
+    if ( !process.env.SKIP_RESET ) {
+        logger.debug('skipping reset');
+        term.reset();
+    }
     term( step.intro  + '\n\n\n');
     exports.prompt( step, callback );
 

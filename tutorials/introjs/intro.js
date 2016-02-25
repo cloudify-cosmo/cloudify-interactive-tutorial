@@ -81,8 +81,11 @@ exports.registerCleanup = function(data){
     function exitHandler(options, err) {
 
         if ( options.cleanup ){
+            logger.debug('cleaning up port', data.port);
             exports.killProcessByPort(data.port);
             exports.deleteWorkspaceFolder(data);
+        }else{
+            logger.debug('not cleaning up');
         }
         if (err) {
             console.log('error happened' , err.stack);

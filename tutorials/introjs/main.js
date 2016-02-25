@@ -26,26 +26,30 @@ var validCommands = require('./validCommands');
 
 var log4js = require('log4js');
 
+var appenders = [];
 
-log4js.configure({
-    appenders: [
-        {
-            level: process.env.LOG_LEVEL || 'FATAL',
-            'type': 'logLevelFilter',
-            appender: {
-                type: 'console'
-            }
-        },
+appenders.push({
+    level: process.env.LOG_LEVEL || 'FATAL',
+    'type': 'logLevelFilter',
+    appender: {
+        type: 'console'
+    }
+});
+
+if ( process.env.LOGENTRIES_TOKEN ){
+    appenders.push(
         {
             level: 'DEBUG',
             'type': 'logLevelFilter',
             appender: {
-                type: 'file',
-                level: 'DEBUG',
-                filename: 'walkthrough.log'
+                type: 'logentries-log4js-appender', options: {token: process.env.LOGENTRIES_TOKEN}
             }
-        }]
+        }
+    )
+}
 
+log4js.configure({
+    appenders: appenders
 });
 
 try {
