@@ -22,7 +22,7 @@ var autocomplete = function (step) {
                 _done();
             },
             function addGlobalCommands(_done){
-                var filteredOptions = _.filter(['next', 'restart', 'exit'], function(o){return o.indexOf(inputString.trim())=== 0});
+                var filteredOptions = _.filter(['next', 'restart', 'exit', 'head'], function(o){return o.indexOf(inputString.trim())=== 0});
                 //console.log('filtered options', filteredOptions);
                 options = options.concat( filteredOptions );
                 _done();

@@ -36,6 +36,19 @@ appenders.push({
     }
 });
 
+if ( process.env.FILE_APPENDER ) {
+    var logfile = path.join(__dirname, 'walkthrough.log');
+    console.log('appending to file', logfile );
+    appenders.push({
+        level: 'DEBUG',
+        'type': 'logLevelFilter',
+        appender: {
+            type: 'file',
+            filename: logfile
+        }
+    });
+}
+
 if ( process.env.LOGENTRIES_TOKEN ){
     appenders.push(
         {
@@ -109,7 +122,9 @@ function main() {
     function stepCallback(input) {
         //console.log('after run step', input);
         var step = getStep();
-        if (input === 'next') {
+        if ( input === 'head' ){
+            run();
+        } else if (input === 'next') {
             nextStep();
         } else if ( input === 'clear'){
             run();
