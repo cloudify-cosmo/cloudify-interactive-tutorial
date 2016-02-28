@@ -7,7 +7,7 @@ function install_python_package_if_needed() {
     ctx logger info "Installing ${package_name}..."
 
     set -e
-    if ! type ansible > /dev/null; then
+    if ! type ${package_name} > /dev/null; then
         pip install ${package_name}
         ctx logger info "Installed ${package_name}"
     fi
