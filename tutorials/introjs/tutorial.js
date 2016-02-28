@@ -98,6 +98,29 @@ exports.prompt = function( step, callback ){
     );
 };
 
+
+exports.confirmNext = function( str, callback ){
+    term(str);
+    term.inputField({
+        autoComplete: ['Y','N'],
+        autoCompleteMenu: true
+    }, function(error,input){
+        try {
+            term('\n');
+            callback( input.toLowerCase() === 'y' );
+
+        }catch(e){
+            callback(false);
+        }
+    })
+
+};
+
+exports.warnStepSkipped = function( str ){
+    term('\n\n\n' + str + '\n\n\n');
+
+};
+
 exports.summary = function( step, callback ){
     term('\n\n\n' + step.summary + '\n\n\n');
     exports.prompt( step, callback )

@@ -7,6 +7,16 @@ help: |
   * restart (Restart the tutorial)
   * exit (Exit the tutorial)
   * commands (Show this command menu)
+confirm_next: |
+  Note that you have not completed some of the
+  previous steps. Continuing means you will not be
+  able to complete the tutorial. Would you like to
+  continue? (y/N):
+skip_warning: |
+    As you have not completed all necessary steps, you
+    cannot perform any other steps. If you wish to
+    browse through the tutorial, you can still perform
+    other actions. You can always `restart` if you wish.
 steps:
   - intro: |
       ======================================================

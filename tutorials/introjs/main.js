@@ -110,12 +110,16 @@ function main() {
     intro.registerCleanup(data);
     var config = intro.readConfig(data);
 
-    var stepCounter = 0;
+    var stepCounter = -1;
+    var commandAccomplished = false;
+    var commandSkipped = false;
 
     function nextStep() {
         if (stepCounter + 1 < config.steps.length) {
             stepCounter++;
         }
+        commandAccomplished = !getStep().command;
+
         setTimeout(run, 0);
     }
 
@@ -125,11 +129,25 @@ function main() {
         if ( input === 'head' ){
             run();
         } else if (input === 'next') {
-            nextStep();
+            if ( !commandAccomplished ){
+                tutorial.confirmNext( config.confirm_next.trim() + ' ' , function( confirmed ){
+                    if ( confirmed ){
+                        commandSkipped = true;
+                        nextStep();
+                    }else{
+                        prompt();
+                    }
+                } );
+            }else {
+                nextStep();
+            }
         } else if ( input === 'clear'){
             run();
         }else if (input === 'restart') {
-            main();
+            intro.cleanup(config);
+            intro.createWorkspaceFolder(config);
+            stepCounter = -1;
+            nextStep();
         } else if ( input === 'help' || input === 'commands' ){
             term(myChalk.brightGreen(config.help));
             prompt();
@@ -137,10 +155,16 @@ function main() {
             tutorial.goodbye();
             process.exit(0);
         } else if (step.command === input) { // MUST COME BEFORE ALLOWED COMMANDS
-            shell.exec(input, function () {
-                // shell will already print output
-                tutorial.summary(step, stepCallback);
-            })
+            if ( commandSkipped ){
+                tutorial.warnStepSkipped( myChalk.brightGreen(config.skip_warning) );
+                prompt();
+            }else {
+                commandAccomplished = true;
+                shell.exec(input, function () {
+                    // shell will already print output
+                    tutorial.summary(step, stepCallback);
+                })
+            }
         } else { // general command
             var commandValidity = validCommands.isValid(input);
             if ( commandValidity.valid ) {
@@ -170,7 +194,7 @@ function main() {
         tutorial.prompt(getStep(), stepCallback);
     }
 
-    run();
+    nextStep();
 }
 
 setTimeout(function(){ // delay for splash screen

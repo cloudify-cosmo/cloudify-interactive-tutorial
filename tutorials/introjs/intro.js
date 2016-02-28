@@ -39,7 +39,7 @@ exports.createWorkspaceFolder = function (data) {
 };
 
 exports.deleteWorkspaceFolder = function (data) { // do not care about sync
-    console.log('deleting workspace');
+    logger.debug('deleting workspace');
     fs.removeSync(exports.getWorkspaceFolder(data));
 };
 
@@ -49,6 +49,7 @@ exports.cleanup = function( data ){
         exports.killProcessByPort(data.port);
     }
 };
+
 
 exports.readConfig = function( data ){
     logger.info('reading configuration');
