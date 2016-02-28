@@ -36,18 +36,17 @@ appenders.push({
     }
 });
 
-if ( process.env.FILE_APPENDER ) {
-    var logfile = path.join(__dirname, 'walkthrough.log');
-    console.log('appending to file', logfile );
-    appenders.push({
-        level: 'DEBUG',
-        'type': 'logLevelFilter',
-        appender: {
-            type: 'file',
-            filename: logfile
-        }
-    });
-}
+
+var logfile = process.env.LOG_FILE || path.join(__dirname, 'walkthrough.log');
+
+appenders.push({
+        type: 'file',
+        filename: logfile,
+        maxLogSize: 10000000,
+        backups: 3
+    }
+);
+
 
 if ( process.env.LOGENTRIES_TOKEN ){
     appenders.push(
@@ -64,6 +63,8 @@ if ( process.env.LOGENTRIES_TOKEN ){
 log4js.configure({
     appenders: appenders
 });
+
+logger.debug('logging to file ', logfile);
 
 try {
     if (process.argv[2] === 'motd') {
