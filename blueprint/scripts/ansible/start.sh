@@ -46,7 +46,7 @@ function main() {
     ANSIBLE_INVENTORY_FILE="$(ctx download-resource-and-render resources/inventory)"
 
     # Setting up Ansible system variable
-    export ANSIBLE_CONFIG_PATH=$ANSIBLE_DIRECTORY/ansible.cfg
+    export ANSIBLE_CONFIG=$ANSIBLE_DIRECTORY/ansible.cfg
     ANSIBLE_VAR_PATH="$ANSIBLE_DIRECTORY/default.yml"
     ANSIBLE_INVENTORY_PATH="$ANSIBLE_DIRECTORY/inventory"
 
@@ -58,7 +58,7 @@ function main() {
     ctx instance runtime-properties confpath "${ANSIBLE_CONFIG_PATH}"
 
     mkdir -p ${ANSIBLE_DIRECTORY}/roles
-    cp $TEMP_CONF_PATH $ANSIBLE_CONFIG_PATH
+    cp $TEMP_CONF_PATH $ANSIBLE_CONFIG
     cp $TEMP_VAR_PATH $ANSIBLE_VAR_PATH
 
     # Move the Inventory file to the running location
@@ -70,7 +70,7 @@ function main() {
     manipulate_playbook
 
     ctx logger info "Running Ansible Playbook..."
-    ansible-playbook ${PLAYBOOK_PATH} > ${ANSIBLE_DIRECTORY}/output.log 2>&1
+    ansible-playbook ${PLAYBOOK_PATH} -i > ${ANSIBLE_DIRECTORY}/output.log 2>&1
     ctx logger info "Playbook execution complete!"
 }
 
