@@ -13,14 +13,11 @@ cfy local refers to executing Cloudify blueprints in local mode.
 The blueprint in this repository sets up interactive tutorial application on AWS infrastructure. AWS plugin will initiate the instance on Europe West region and the application code will be deployed by Ansible
 
 
-This blueprint consist of: Keypair, ElasticIP, Security Group and Compute instance. The tutorial application will eventually be hosted on the Compute instance.
-Prior to running the blueprint you'll need to make some adjustments to the input file regarding the AWS environment.
-
 ### Set up an AWS environment:
 
 You'll need to make some adjustments to the input file to provide your own AWS credentials.
-Edit inputs/inputs.yaml and add you access key and secret
-You can also change the region, instance type and AMI (AMI must be support hvm)
+Edit inputs/inputs.yaml and add your access key and secret
+You can also change the region, instance type and AMI (AMI must support hvm)
 
 Now, execute the install workflow for the infrastructure:
 
@@ -31,14 +28,15 @@ For AWS:
 ```
 
 
-To see the application, you can go to http://[THE APPLICATION URL]:8088/.
+To see the application, you can go to http://[THE APPLICATION URL]:8088
 
 To uninstall the application run:
 ```bash
 cfy local execute -w uninstall --task-retries=9 --task-retry-interval=10
 ```
 
-### Once server is deployed you should consider closing port 22 that was used by Ansible.
+### Once the server is deployed you must close port 22 in the AWS Security group manually.
+It was used by Ansible and is needed for anything else. This is a major security breach and it should be closed
 
 ## Update Tutorial deployment
 
