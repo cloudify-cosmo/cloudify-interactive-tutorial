@@ -29,7 +29,6 @@ function install_ansible-2.0.0.2() {
     set +e
 }
 
-}
 function manipulate_playbook() {
     # We need this manipulation because both Ansible and Cloudify use double curly braces to pass variables
     # This function will replace "Place holders" with the variables intended to Ansible
@@ -43,7 +42,7 @@ function manipulate_playbook() {
 
 function main() {
 
-    ANSIBLE_DIRECTORY="/tmp/$(ctx execution-id)/ansible"
+    ANSIBLE_DIRECTORY="tmp/$(ctx execution-id)/ansible"
     PLAYBOOK_FILENAME="main.yaml"
     # This is currently hardcoded but should be a property in the blueprint
     PLAYBOOK_PATH="${ANSIBLE_DIRECTORY}/${PLAYBOOK_FILENAME}"
