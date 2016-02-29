@@ -14,14 +14,22 @@ function install_python_package_if_needed() {
     set +e
 }
 
-function install_ansible() {
-    install_python_package_if_needed 'ansible'
-}
-
 function install_repex() {
     install_python_package_if_needed 'repex'
 }
 
+function install_ansible-2.0.0.2() {
+    ctx logger info "Installing Ansible v2.0.0.2..."
+
+    set -e
+    if ! type ansible > /dev/null; then
+        pip install ansible==2.0.0.2
+        ctx logger info "Installed Ansible v2.0.0.2"
+    fi
+    set +e
+}
+
+}
 function manipulate_playbook() {
     # We need this manipulation because both Ansible and Cloudify use double curly braces to pass variables
     # This function will replace "Place holders" with the variables intended to Ansible
@@ -51,26 +59,26 @@ function main() {
     ANSIBLE_INVENTORY_PATH="$ANSIBLE_DIRECTORY/inventory"
 
 
-    install_ansible
+    install_ansible-2.0.0.2
     install_repex
 
     # I need to confirm this is a must
-    ctx instance runtime-properties confpath "${ANSIBLE_CONFIG_PATH}"
+    ctx instance runtime-properties confpath "${ANSIBLE_CONFIG}"
 
     mkdir -p ${ANSIBLE_DIRECTORY}/roles
     cp $TEMP_CONF_PATH $ANSIBLE_CONFIG
     cp $TEMP_VAR_PATH $ANSIBLE_VAR_PATH
+    cp $TEMP_PLAYBOOK $PLAYBOOK_PATH
 
     # Move the Inventory file to the running location
     cp $ANSIBLE_INVENTORY_FILE $ANSIBLE_INVENTORY_PATH
     # We input the host public IP from the blueprint runtime enviorment
     rpx repl -p $ANSIBLE_INVENTORY_PATH -r HOST -w $tutorial_application_host_public_ip
-    cp $TEMP_PLAYBOOK $PLAYBOOK_PATH
 
     manipulate_playbook
 
     ctx logger info "Running Ansible Playbook..."
-    ansible-playbook ${PLAYBOOK_PATH} -i > ${ANSIBLE_DIRECTORY}/output.log 2>&1
+    ansible-playbook ${PLAYBOOK_PATH} -i $ANSIBLE_INVENTORY_PATH > ${ANSIBLE_DIRECTORY}/output.log 2>&1
     ctx logger info "Playbook execution complete!"
 }
 

@@ -39,11 +39,11 @@ inputs:
 
   keypair_name:
     type: string
-    default: cfy_local_keypair
+    default: intro_tutorial_keypair
 
   ssh_key_filename:
     type: string
-    default: ~/.ssh/cfy_local_keypair.pem
+    default: ~/.ssh/intro_tutorial_keypair.pem
 
   use_existing_server_for_tutorial_application:
     type: boolean
