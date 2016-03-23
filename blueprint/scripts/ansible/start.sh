@@ -54,6 +54,7 @@ function main() {
 
     # Setting up Ansible system variable
     export ANSIBLE_CONFIG=$ANSIBLE_DIRECTORY/ansible.cfg
+    ctx logger info "ansible conf path: ${ANSIBLE_CONFIG}"
     ANSIBLE_VAR_PATH="$ANSIBLE_DIRECTORY/default.yml"
     ANSIBLE_INVENTORY_PATH="$ANSIBLE_DIRECTORY/inventory"
 
@@ -77,7 +78,7 @@ function main() {
     manipulate_playbook
 
     ctx logger info "Running Ansible Playbook..."
-    ansible-playbook ${PLAYBOOK_PATH} -i $ANSIBLE_INVENTORY_PATH > ${ANSIBLE_DIRECTORY}/output.log 2>&1
+    sleep 60 && ansible-playbook ${PLAYBOOK_PATH} -i ${ANSIBLE_INVENTORY_PATH} > ${ANSIBLE_DIRECTORY}/output.log 2>&1
     ctx logger info "Playbook execution complete!"
 }
 

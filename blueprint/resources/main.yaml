@@ -62,14 +62,18 @@
       git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=no update=yes
       when: tutorial_clone_status.stat.exists == True and deploy_code.stdout == "True"
 
+    - name: Create symlink to node.
+      sudo: yes
+      file: src=/opt/nodejs/node-v4.2.1-linux-x64/bin/node dest=/bin/node state=link
+
     - name: Install interactive tutorial.
       sudo: yes
       shell: 'npm install -g cloudify-cosmo/cloudify-interactive-tutorial'
       when: deploy_code.stdout == "False"
 
-    - name: Create symlink to node.
+    - name: Create tutorial log 2 file.
       sudo: yes
-      file: src=/opt/nodejs/node-v4.2.1-linux-x64/bin/node dest=/bin/node state=link
+      file: path=/usr/local/lib/node_modules/cloudify-interactive-tutorial/tutorials/introjs/walkthrough.log owner=nobody group=ubuntu state=touch mode=0666
 
     - name: Install pip package.
       sudo: yes
