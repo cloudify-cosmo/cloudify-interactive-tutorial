@@ -165,5 +165,5 @@ exports.notAllowed = function( reason ){
 };
 
 exports.goodbye = function(){
-    term( myChalk.brightGreen('Please come again!!\n'));
+    term( myChalk.brightGreen('Thanks for stopping by!\n'));
 };
