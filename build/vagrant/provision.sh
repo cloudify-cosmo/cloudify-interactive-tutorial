@@ -66,10 +66,9 @@ export EXTERNAL_IP=`dig +short myip.opendns.com @resolver1.opendns.com`
 echo "export EXTERNAL_IP=\"${EXTERNAL_IP}\"" >> ~/.bashrc
 
 echo "starting butterfly"
-MOTD_FILE=`cfy-tutorial motd`
 PORT_NUMBER=8088
 fuser -k -TERM -n tcp ${PORT_NUMBER} || echo "no port to clean"
-nohup butterfly.server.py --unsecure --host=0.0.0.0 --port=${PORT_NUMBER} --motd=${MOTD_FILE} --login=False --shell="cfy-tutorial" & > /dev/null
+nohup butterfly.server.py --unsecure --host=0.0.0.0 --port=${PORT_NUMBER} --login=False --shell="cfy-tutorial" & > /dev/null
 
 
 export MY_IP=`dig +short myip.opendns.com @resolver1.opendns.com`
