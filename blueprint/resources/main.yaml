@@ -1,0 +1,111 @@
+---
+- hosts: {{ ctx.node.name }}
+  remote_user: ubuntu
+  vars_files:
+    - ./default.yml
+
+  tasks:
+    - name: Define "sys_update" var.
+      shell: 'ansible_veriable_sys_update'
+      register: sys_update
+
+    - name: Define "deploy" var.
+      shell: 'ansible_veriable_deploy'
+      register: deploy_code
+
+    - name: Run apt-get update.
+      sudo: yes
+      apt: update_cache=yes
+      when: ansible_pkg_mgr == "apt" and sys_update.stdout == "True"
+
+    - name: Install dependencies packages.
+      sudo: yes
+      apt: name=ansible_items state=present
+      with_items:
+         - build-essential
+         - libssl-dev
+         - libffi-dev
+         - python-pip
+         - python-dev
+         - unzip
+         - git
+         - wget
+         - npm
+      when: ansible_pkg_mgr == "apt"
+
+    - name: Check if cloudify-interactive-tutorial folder exsist for clone.
+      stat: path=/home/ubuntu/cloudify-interactive-tutorial
+      register: tutorial_clone_status
+
+    - name: Clone the cloudify-interactive-tutorial repo git.
+      git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=yes update=no
+      when: tutorial_clone_status.stat.exists == False
+
+    - name: Check if simple-python-webserver-blueprint folder exsist for clone.
+      stat: path=/home/ubuntu/simple-python-webserver-blueprint
+      register: blueprint_clone_status
+
+    - name: Clone the simple-python-webserver-blueprint repo git.
+      git: repo=https://github.com/cloudify-examples/simple-python-webserver-blueprint.git dest=/home/ubuntu/simple-python-webserver-blueprint clone=yes update=no
+      when: blueprint_clone_status.stat.exists == False
+
+    - name: Create nodejs directory.
+      sudo: yes
+      file: path=/opt/nodejs state=directory mode=0755
+
+    - name: Download & extarct the node file.
+      sudo: yes
+      unarchive: src="https://nodejs.org/dist/v4.2.1/node-v4.2.1-linux-x64.tar.gz" dest=/opt/nodejs copy=no
+      when: deploy_code.stdout == "False"
+
+    - name: Deploy the cloudify-interactive-tutorial repo git.
+      git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=no update=yes
+      when: tutorial_clone_status.stat.exists == True and deploy_code.stdout == "True"
+
+    - name: Create symlink to node.
+      sudo: yes
+      file: src=/opt/nodejs/node-v4.2.1-linux-x64/bin/node dest=/bin/node state=link
+
+    - name: Install interactive tutorial.
+      sudo: yes
+      shell: 'npm install -g cloudify-cosmo/cloudify-interactive-tutorial'
+      when: deploy_code.stdout == "False"
+
+    - name: Create tutorial log 2 file.
+      sudo: yes
+      file: path=/usr/local/lib/node_modules/cloudify-interactive-tutorial/tutorials/introjs/walkthrough.log owner=nobody group=ubuntu state=touch mode=0666
+
+    - name: Install pip packages.
+      sudo: yes
+      pip: name=ansible_items
+      with_items:
+         - cloudify
+         - butterfly==2.0.0
+         - virtualenvwrapper
+
+    - name: Create virtaul enviroment for serv
+      sudo: yes
+      shell: 'virtualenv serv'
+
+
+    - name: Install serv package
+      sudo: yes
+      shell: '/home/ubuntu/serv/bin/pip install https://github.com/nir0s/serv/archive/9-support-upstart-env-vars.zip'
+
+
+    - name: Define "ext_ip" var.
+      shell: dig +short myip.opendns.com @resolver1.opendns.com
+      register: ext_ip
+
+    - name: Find butterfly pid.
+      shell: pgrep ^butterfly
+      register: butterfly_PID
+      when: deploy_code.stdout == "True"
+
+    - name: Kill the butterfly process.
+      shell: kill -9 butterfly_pid_stdout
+      when: deploy_code.stdout == "True"
+
+    - name: Starting butterfly.
+      sudo: yes
+      shell: '/home/ubuntu/serv/bin/serv generate /usr/local/bin/butterfly.server.py --name butterfly --args "--unsecure --host=0.0.0.0 --port=8088 --motd=/usr/local/lib/node_modules/cloudify-interactive-tutorial/conf/motd --login=False --shell=cfy-tutorial" --var CONTENT_HOME=/home/ubuntu/simple-python-webserver-blueprint --var WALKTHROUGH_ROOT=/home/ubuntu/simple-python-webserver-blueprint --var NODE_VERSION=4.2.1 --var EXTERNAL_IP="ansible_host_external_ip" --var LOGENTRIES_TOKEN="LE_TOKEN" --deploy --start'

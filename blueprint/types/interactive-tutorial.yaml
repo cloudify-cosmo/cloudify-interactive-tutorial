@@ -1,0 +1,26 @@
+################################################################
+# Blueprint node types.
+#
+# specific new types for the nodecellar app.
+# these types are mapped to scripts that are resposible
+# for the lifecycle operation.
+################################################################
+
+node_types:
+
+  tutorial.nodes.Intro:
+    derived_from: cloudify.nodes.ApplicationModule
+    properties:
+      playbook_file_name:
+        description: >
+          The name of a playbook needed to execute this nodes requirements.
+          Also, this is the name of the same file under ./resources.
+        type: string
+        default: main.yaml
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        create:
+          implementation: scripts/ansible/start.sh
+          inputs:
+            tutorial_application_host_public_ip:
+              default: { get_attribute: [tutorial_application_server_ip, aws_resource_id]}

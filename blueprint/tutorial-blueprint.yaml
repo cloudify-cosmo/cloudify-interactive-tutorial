@@ -1,0 +1,135 @@
+tosca_definitions_version: cloudify_dsl_1_2
+
+description: >
+  This blueprint uses the cloudify Ansible (SSH) plugin to install a
+  Cloudify intro Tutorial application. It uses AWS as the infrastructre
+  and Uses Ansible to update and deploy the application code
+
+imports:
+  - http://www.getcloudify.org/spec/cloudify/3.3.1/types.yaml
+  - http://www.getcloudify.org/spec/aws-plugin/1.4/plugin.yaml
+  - types/interactive-tutorial.yaml
+
+inputs:
+
+  tutorial_application_port:
+    type: string
+    default: 8088
+
+  aws_access_key_id:
+    type: string
+
+  aws_secret_access_key:
+    type: string
+
+  ec2_region_name:
+    type: string
+
+  use_existing_security_group_for_tutorial_application:
+    type: boolean
+    default: false
+
+  tutorial_application_security_group_id:
+    type: string
+    default: ''
+
+  use_existing_keypair:
+    type: boolean
+    default: false
+
+  keypair_name:
+    type: string
+    default: intro_tutorial_keypair
+
+  ssh_key_filename:
+    type: string
+    default: ~/.ssh/intro_tutorial_keypair.pem
+
+  use_existing_server_for_tutorial_application:
+    type: boolean
+    default: false
+
+  tutorial_application_server_id:
+    type: string
+    default: ''
+
+  tutorial_application_server_image_id:
+    type: string
+
+  tutorial_application_server_instance_type:
+    type: string
+
+  use_existing_ip_for_tutorial_application:
+    type: boolean
+    default: false
+
+  tutorial_application_server_ip:
+    type: string
+    default: ''
+
+dsl_definitions:
+  aws_config: &AWS_CONFIG
+    aws_access_key_id: { get_input: aws_access_key_id }
+    aws_secret_access_key: { get_input: aws_secret_access_key }
+    ec2_region_name: { get_input: ec2_region_name }
+
+node_templates:
+
+  tutorial_application_server_ip:
+    type: cloudify.aws.nodes.ElasticIP
+    properties:
+      aws_config: *AWS_CONFIG
+      use_external_resource: { get_input: use_existing_ip_for_tutorial_application }
+      resource_id: { get_input: tutorial_application_server_ip }
+
+  tutorial_application_host:
+    type: cloudify.aws.nodes.Instance
+    properties:
+      aws_config: *AWS_CONFIG
+      use_external_resource: { get_input: use_existing_server_for_tutorial_application }
+      resource_id: { get_input: tutorial_application_server_id }
+      install_agent: false
+      image_id: { get_input: tutorial_application_server_image_id }
+      instance_type: { get_input: tutorial_application_server_instance_type }
+    relationships:
+      - target: keypair
+        type: cloudify.aws.relationships.instance_connected_to_keypair
+      - target: tutorial_application_server_ip
+        type: cloudify.aws.relationships.instance_connected_to_elastic_ip
+      - target: tutorial_application_security_group
+        type: cloudify.aws.relationships.instance_connected_to_security_group
+
+  keypair:
+    type: cloudify.aws.nodes.KeyPair
+    properties:
+      aws_config: *AWS_CONFIG
+      use_external_resource: { get_input: use_existing_keypair }
+      resource_id: { get_input: keypair_name }
+      private_key_path: { get_input: ssh_key_filename }
+
+  tutorial_application_security_group:
+    type: cloudify.aws.nodes.SecurityGroup
+    properties:
+      aws_config: *AWS_CONFIG
+      use_external_resource: { get_input: use_existing_security_group_for_tutorial_application }
+      resource_id: { get_input: tutorial_application_security_group_id }
+      description: Security group for tutorial_application VMs
+      rules:
+        - ip_protocol: tcp
+          from_port: 22
+          to_port: 22
+          cidr_ip: 0.0.0.0/0
+        - ip_protocol: tcp
+          from_port: { get_input: tutorial_application_port }
+          to_port: { get_input: tutorial_application_port }
+          cidr_ip: 0.0.0.0/0
+        - ip_protocol: tcp
+          from_port: 32000
+          to_port: 39000
+          cidr_ip: 0.0.0.0/0
+
+  tutorial_application:
+    type: tutorial.nodes.Intro
+    relationships:
+      - type: cloudify.relationships.contained_in
+        target: tutorial_application_host
