@@ -38,7 +38,7 @@
       register: tutorial_clone_status
 
     - name: Clone the cloudify-interactive-tutorial repo git.
-      git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=yes update=no
+      git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=yes update=no version=fix-bugs
       when: tutorial_clone_status.stat.exists == False
 
     - name: Check if simple-python-webserver-blueprint folder exsist for clone.
