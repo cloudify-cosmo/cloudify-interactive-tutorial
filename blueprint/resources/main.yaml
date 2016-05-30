@@ -68,7 +68,7 @@
 
     - name: Install interactive tutorial.
       sudo: yes
-      shell: 'npm install -g cloudify-cosmo/cloudify-interactive-tutorial'
+      shell: 'npm install -g cloudify-cosmo/cloudify-interactive-tutorial.git#fix-bugs'
       when: deploy_code.stdout == "False"
 
     - name: Create tutorial log 2 file.
