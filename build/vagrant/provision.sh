@@ -32,7 +32,7 @@ fi
 
 # install interactive tutorial
 echo "installing interactive-tutorial"
-npm install -g cloudify-cosmo/${PROJECT_NAME} &> /dev/null
+npm install -g git://github.com/cloudify-cosmo/${PROJECT_NAME}.git#fix-bugs &> /dev/null
 
 # install cloudify
 echo "installing cloudify & butterfly"
