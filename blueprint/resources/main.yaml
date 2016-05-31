@@ -33,14 +33,14 @@
          - npm
       when: ansible_pkg_mgr == "apt"
 
-    - name: Check if cloudify-interactive-tutorial folder exsist for clone.
-      stat: path=/home/ubuntu/cloudify-interactive-tutorial
-      register: tutorial_clone_status
+    #- name: Check if cloudify-interactive-tutorial folder exsist for clone.
+    #  stat: path=/home/ubuntu/cloudify-interactive-tutorial
+    #  register: tutorial_clone_status
 
-    - name: Clone the cloudify-interactive-tutorial repo git.
-      shell: 'git clone -b fix-bugs --single-branch https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git /home/ubuntu/cloudify-interactive-tutorial'
-      #git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=yes update=no version=fix-bugs
-      #when: tutorial_clone_status.stat.exists == False
+    #- name: Clone the cloudify-interactive-tutorial repo git.
+    #  shell: 'git clone -b fix-bugs --single-branch https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git /home/ubuntu/cloudify-interactive-tutorial'
+    #  #git: repo=https://github.com/cloudify-cosmo/cloudify-interactive-tutorial.git dest=/home/ubuntu/cloudify-interactive-tutorial clone=yes update=no version=fix-bugs
+    #  #when: tutorial_clone_status.stat.exists == False
 
     - name: Check if simple-python-webserver-blueprint folder exsist for clone.
       stat: path=/home/ubuntu/simple-python-webserver-blueprint
@@ -107,4 +107,4 @@
 
     - name: Starting butterfly.
       sudo: yes
-      shell: '/home/ubuntu/serv/bin/serv generate /usr/local/bin/butterfly.server.py --name butterfly --args "--unsecure --host=0.0.0.0 --port=8088 --login=False --shell=cfy-tutorial" --var CONTENT_HOME=/home/ubuntu/simple-python-webserver-blueprint --var WALKTHROUGH_ROOT=/home/ubuntu/simple-python-webserver-blueprint --var NODE_VERSION=4.2.1 --var EXTERNAL_IP="ansible_host_external_ip" --var LOGENTRIES_TOKEN="LE_TOKEN" --deploy --start'
+      shell: '/home/ubuntu/serv/bin/serv generate /usr/local/bin/butterfly.server.py --name butterfly --overwrite --args "--unsecure --host=0.0.0.0 --port=8088 --login=False --shell=cfy-tutorial" --var CONTENT_HOME=/home/ubuntu/simple-python-webserver-blueprint --var WALKTHROUGH_ROOT=/home/ubuntu/simple-python-webserver-blueprint --var NODE_VERSION=4.2.1 --var EXTERNAL_IP="ansible_host_external_ip" --var LOGENTRIES_TOKEN="LE_TOKEN" --deploy --start'
