@@ -107,8 +107,4 @@
 
     - name: Starting butterfly.
       sudo: yes
-<<<<<<< HEAD
       shell: '/home/ubuntu/serv/bin/serv generate /usr/local/bin/butterfly.server.py --name butterfly --args "--unsecure --host=0.0.0.0 --port=8088 --login=False --shell=cfy-tutorial" --var CONTENT_HOME=/home/ubuntu/simple-python-webserver-blueprint --var WALKTHROUGH_ROOT=/home/ubuntu/simple-python-webserver-blueprint --var NODE_VERSION=4.2.1 --var EXTERNAL_IP="ansible_host_external_ip" --var LOGENTRIES_TOKEN="LE_TOKEN" --deploy --start'
-=======
-      shell: '/home/ubuntu/serv/bin/serv generate /usr/local/bin/butterfly.server.py --name butterfly --args "--unsecure --host=0.0.0.0 --port=8088 --motd=/usr/local/lib/node_modules/cloudify-interactive-tutorial/conf/motd --login=False --shell=cfy-tutorial" --var CONTENT_HOME=/home/ubuntu/simple-python-webserver-blueprint --var WALKTHROUGH_ROOT=/home/ubuntu/simple-python-webserver-blueprint --var NODE_VERSION=4.2.1 --var EXTERNAL_IP="ansible_host_external_ip" --var LOGENTRIES_TOKEN="LE_TOKEN" --deploy --start'
->>>>>>> fe39397693c46ad88ea9a936129fc8bf61ef6c25
